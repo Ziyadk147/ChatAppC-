@@ -15,7 +15,7 @@ using namespace sql;
 ORM::ORM(){
 
     this->driver = get_driver_instance();
-    this->connectionProperties = ORM::getPropertiesFromUser();
+    // this->connectionProperties = ORM::getPropertiesFromUser();
 };
 
 //pointer Connection* because  Connection throws error
@@ -51,13 +51,13 @@ vector<string> ORM::getPropertiesFromUser(){
 }
 
 
-void ORM::createConnection(){
+Connection* ORM::createConnection(vector<string> connectionProperties){
     
     try{
-        string connectionAddr = this->connectionProperties[0];
-        string username = this->connectionProperties[1];
-        string password = this->connectionProperties[2];
-        string database = this->connectionProperties[3];
+        string connectionAddr = connectionProperties[0];
+        string username = connectionProperties[1];
+        string password = connectionProperties[2];
+        string database = connectionProperties[3];
 
 
         this->connection = driver->connect(connectionAddr , username , password );
@@ -66,7 +66,7 @@ void ORM::createConnection(){
         if(this->connection){
 
             cout << "Connected";
-        
+            return this->connection;
         }
     }
     catch(SQLException &e){

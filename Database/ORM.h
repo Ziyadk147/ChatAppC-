@@ -1,3 +1,7 @@
+#ifndef ORM_H
+#define ORM_H
+
+
 #include<iostream>
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
@@ -10,23 +14,24 @@ using namespace std;
 using namespace sql;
 
 class ORM {
-    private:
+    protected:
         Driver *driver;
         Connection *connection;
         Statement *statement;
         ResultSet *resultset;
 
     
-    protected:
-        vector<string> connectionProperties;
-        vector<string> getPropertiesFromUser();
+    
+    
 
 
     public:
         ORM();
-        void createConnection();
+        vector<string> getPropertiesFromUser();
+        Connection* createConnection( vector<string> connectionProperties); 
         // ResultSet* raw(string query);
         // void createRecord();
 
 
 };
+#endif
