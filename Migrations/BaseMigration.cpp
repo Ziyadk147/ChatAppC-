@@ -1,4 +1,4 @@
-#include "Database/ORM.h"
+#include "../Database/ORM.h"
 
 #include<iostream>
 #include <mysql_connection.h>
@@ -14,6 +14,7 @@ using namespace sql;
 class Migration : protected ORM{
     private:
         Connection* initiateConnection(){
+    
     
                 return createConnection(ORM::getPropertiesFromUser());
         

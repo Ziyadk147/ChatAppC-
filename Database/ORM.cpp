@@ -73,6 +73,6 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
         cout << "SQL EXCEPTION " << e.what() << endl;
         cout << "SQLState" << e.getSQLState() << endl;
     }
-    
+    return 0;
 };
 

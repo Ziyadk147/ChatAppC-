@@ -14,5 +14,10 @@ class MessagesTable : protected Migration{
     private:
         string columns = "id INT AUTO_INCREMENT PRIMARY KEY, message VARCHAR(255) NOT NULL,sender_id INT ,receiver_id INT ";
         string table = "messages"; 
+    public:
+        MessagesTable(){
 
+            create(this->table , this->columns);
+        
+        }
 };
