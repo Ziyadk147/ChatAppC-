@@ -72,6 +72,14 @@ void Server::createServerSession(tcp::socket socket){
     */
 }
 
+string Server::getIP(){
+    return this->ip_addr;
+};
+
+int Server::getPort(){
+    return this->port;
+}
+
 void Server::broadCastMessageToClients(const string& message , shared_ptr<tcp::socket> sender){
  
     lock_guard <mutex> lock(clients_mutex); //locks the transaction(client_mutex)

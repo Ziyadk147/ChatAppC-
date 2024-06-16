@@ -1,3 +1,7 @@
+#ifndef SERVER_H
+#define SERVER_H
+
+
 #include<iostream>
 #include<boost/asio.hpp>
 #include<mutex>
@@ -24,4 +28,8 @@ class Server {
         void createServerSession(tcp::socket socket);
 
         tcp::socket createSocket(boost::asio::io_context iocontext);
+        string getIP();
+        int getPort();
 };
+
+#endif
