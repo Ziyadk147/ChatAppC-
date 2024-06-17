@@ -29,7 +29,7 @@ void Server::createConnection(tcp::socket socket){
             size_t length = client_socket->read_some(boost::asio::buffer(this->data) , error);
 
             if(error == boost::asio::error::eof){
-                cout << "Client Disconnected" << "\n";
+                // cout << "Client Disconnected" << "\n";
                 break;                
             }
             else if(error){
