@@ -104,6 +104,7 @@ int main(){
         Server server;
         boost::asio::io_context io_context;
         tcp::acceptor acceptor(io_context , tcp::endpoint(tcp::v4() , server.port));
+        cout << "Server started at port " << server.port  << endl;
         while(true){
             tcp::socket socket(io_context);
             acceptor.accept(socket);

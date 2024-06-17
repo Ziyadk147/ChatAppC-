@@ -1,8 +1,7 @@
 #include<iostream>
 #include<thread>
-
 #include "client.h"
-// #include "server.h"
+
 using namespace std;
 
 Client::Client(){
@@ -20,7 +19,7 @@ void Client::readFromServer(shared_ptr<tcp::socket> socket){
             size_t messageLength  = socket->read_some(boost::asio::buffer(this->receiveData) , error);
 
             if(error == boost::asio::error::eof){
-                throw "User Left :( ";
+                throw boost::system::error_code(error);
             }
             else if (error){
                 throw boost::system::error_code(error);
