@@ -20,12 +20,17 @@ class Client{
     public:
         Client();
         Client(string ipAddr , int port);
+
+
         int getServerPort();
         string getServerIP();
-        // void connection(tcp::socket& socket );
+        int connectionPort; 
+        string connectionIP;
+
+
         void readFromServer(shared_ptr <tcp::socket> socket);
         void writeToServer(shared_ptr<tcp::socket> socket);
-
+        void getConnectionDetailsFromUser();
 };
 
 #endif

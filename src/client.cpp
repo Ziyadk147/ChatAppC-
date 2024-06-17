@@ -5,7 +5,7 @@
 using namespace std;
 
 Client::Client(){
-    // Client::Server(8080 , "127.0.0.1");
+    this->getConnectionDetailsFromUser();
 }
 Client::Client(string ip, int port ){
     // Client::Server(port , ip);
@@ -56,16 +56,31 @@ void Client::writeToServer(shared_ptr<tcp::socket> socket){
     }    
 }
 
-// int Client::getServerPort(){
-//     return Client::Server::getPort();
-// }
+void Client::getConnectionDetailsFromUser(){
+    
+        string ip;
+        cout << "Client Started\n " << "Please enter the server ip or if you are on the same network as server type localhost in lowercase " << "\n" ;
+        cin  >> ip;
+        if(ip == "localhost"){
+            this->connectionIP = "127.0.0.1";
+            ip = "";
+        }
+        else{
+            this->connectionIP = ip;
+        }
+        cout << "\nPlease enter the server port\n";
+        cin >> this->connectionPort;
 
-// string Client::getServerIP(){
-//     return Client::Server::getIP();
-// }
+    
+    
+
+
+
+}
 
 int main(){
     try{
+
         Client client("127.0.0.1" , 8080);
         boost::asio::io_context io_context;
 
