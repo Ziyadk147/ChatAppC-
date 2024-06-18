@@ -12,6 +12,14 @@ using namespace std;
 using namespace sql;
 
 
+
+const int CONNECTION_STRING = 0;
+const int USERNAME = 1;
+const int PASSWORD = 2;
+const int DBNAME  = 3;
+
+
+
 ORM::ORM(){
 
     this->driver = get_driver_instance();
@@ -50,22 +58,120 @@ vector<string> ORM::getPropertiesFromUser(){
     
 }
 
+void ORM::createDatabaseIfNotExists(string database){
+    
+    try{
+    
+        string dbName = database;
+
+        Statement* state = this->connection->createStatement();
+
+        string query = "CREATE DATABASE IF NOT EXISTS " + dbName;
+
+        state->execute(query);
+
+        
+
+        delete state;
+    }
+    catch(SQLException &e){
+
+        cout << "SQL EXCEPTION " << e.what() << endl;
+        cout << "SQLState" << e.getSQLState() << endl;
+
+    }
+};
+
+bool ORM::checkIfTableExists(string tableName){
+    try{
+        Statement* state = this->connection->createStatement();
+        string query =  "SHOW TABLES";
+
+        ResultSet* table = state->executeQuery(query);
+
+        while(table->next()){
+        
+            if(table->getString(1) == tableName){
+                
+                return true;
+            
+            }
+        }
+        delete state;
+        delete table;
+    }
+    catch(SQLException &e){
+
+        cout << "SQL EXCEPTION " << e.what() << endl;
+        cout << "SQLState" << e.getSQLState() << endl;
+
+    }
+    return false;
+}
+
+bool ORM::checkIfDatabaseExists(string dbName){
+    try{
+
+        Statement* state = this->connection->createStatement();
+        string query =  "SHOW DATABASES";
+
+        ResultSet* databaseName = state->executeQuery(query);
+
+        while(databaseName->next()){
+        
+            if(databaseName->getString(1) == dbName){
+                
+                return true;
+            
+            }
+        }
+
+        delete state;
+        delete databaseName;
+
+    }
+    catch(SQLException &e){
+
+        cout << "SQL EXCEPTION " << e.what() << endl;
+        cout << "SQLState" << e.getSQLState() << endl;
+
+    }
+    
+    return false;
+
+};
+
 
 Connection* ORM::createConnection(vector<string> connectionProperties){
     
     try{
-        string connectionAddr = connectionProperties[0];
-        string username = connectionProperties[1];
-        string password = connectionProperties[2];
-        string database = connectionProperties[3];
+        string connectionAddr = connectionProperties[CONNECTION_STRING];
+        string username = connectionProperties[USERNAME];
+        string password = connectionProperties[PASSWORD];
+        string database = connectionProperties[DBNAME];
 
 
         this->connection = driver->connect(connectionAddr , username , password );
+        if(! this->checkIfDatabaseExists(database) ){
+            char choice;
+            
+            cout << "Database Doesnt not Exists!\nPress y or Y to create a new Database with the name " << database << "\n" ;
+            
+            cin >> choice;
+            
+            if(choice == 'Y' || choice == 'y'){
+                
+                this->createDatabaseIfNotExists(database);
+                cout << "\nDatabase Created Successfully\n";
+            
+            }
+        }
+        // this->createDatabaseIfNotExists(database);
         this->connection->setSchema(database);
 
         if(this->connection){
 
-            cout << "Connected";
+            cout << "\n Connected";
             return this->connection;
         }
     }

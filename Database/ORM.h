@@ -19,9 +19,10 @@ class ORM {
         Connection *connection;
         Statement *statement;
         ResultSet *resultset;
-
-    
-    
+        void createDatabaseIfNotExists(string database);
+        
+        bool checkIfDatabaseExists(string dbName);
+        bool checkIfTableExists(string tableName);
     
 
 
@@ -29,7 +30,7 @@ class ORM {
         ORM();
         vector<string> getPropertiesFromUser();
         Connection* createConnection( vector<string> connectionProperties); 
-        // ResultSet* raw(string query);
+          // ResultSet* raw(string query);
         // void createRecord();
 
 
