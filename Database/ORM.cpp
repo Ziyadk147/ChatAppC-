@@ -29,6 +29,7 @@ ORM::ORM(){
 //pointer Connection* because  Connection throws error
 
 vector<string> ORM::getPropertiesFromUser(){
+    
     vector <string> tempVector;
     string tempInput;
     
@@ -145,6 +146,7 @@ bool ORM::checkIfDatabaseExists(string dbName){
 Connection* ORM::createConnection(vector<string> connectionProperties){
     
     try{
+    
         string connectionAddr = connectionProperties[CONNECTION_STRING];
         string username = connectionProperties[USERNAME];
         string password = connectionProperties[PASSWORD];
@@ -152,6 +154,9 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
 
         this->connection = driver->connect(connectionAddr , username , password );
+        
+        this->connectionProps = connectionProperties;
+
         if(! this->checkIfDatabaseExists(database) ){
             char choice;
             
@@ -173,12 +178,61 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
             cout << "\n Connected";
             return this->connection;
+    
         }
     }
     catch(SQLException &e){
+    
         cout << "SQL EXCEPTION " << e.what() << endl;
         cout << "SQLState" << e.getSQLState() << endl;
+    
     }
     return 0;
 };
 
+ResultSet* ORM::rawQuery(string query){
+    Statement* stmt;
+    try{
+        if(this->connectionProps.empty()){
+            
+            this->createConnection(this->getPropertiesFromUser());
+
+        }
+        else{
+
+            this->createConnection(this->connectionProps);   
+        
+        }
+        
+        stmt = this->connection->createStatement();
+    
+    }
+    catch(SQLException& e){
+
+        cerr << "SQL EXCEPTION " << e.what() << "\n";
+        cerr << "SQLState" << e.getSQLState() << "\n";
+    
+    }
+    return stmt->executeQuery(query);
+
+}
+
+ResultSet* ORM::where(string columns , string tablename , string operand1 , string sqlOperator , string operand2){ 
+    
+        string query = "SELECT "+columns+" FROM "+tablename+" WHERE "+operand1 +" "+sqlOperator+" "+"'"+operand2+"'";
+  
+        // cout << query;
+  
+        return this->rawQuery(query);
+    
+         
+};
+string ORM::parseSingleString(ResultSet* result){
+    while(result->next()){
+ 
+        return result->getString(1);
+ 
+    }
+    return "";
+    // delete result;
+};

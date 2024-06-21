@@ -14,7 +14,7 @@ class User : public ORM{
     public:
     
         void getUserNameFromDB(string userName);
-        
+        void getPassWordFromDB(string userName);    
         
 };
 

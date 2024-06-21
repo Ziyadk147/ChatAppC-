@@ -1,4 +1,5 @@
 CHAT APPLICATION USING C++
 
-this application uses boost asio library for async communication
-and mysqlcppconn lib for its ORM
+This is a Chat Application written in C++, it uses 2 external libraries
+1)BOOST ASIO for networking and communication
+2)

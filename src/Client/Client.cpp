@@ -11,6 +11,7 @@ using namespace std;
 int main(){
     try{
         Client client;
+
         boost::asio::io_context io_context;
         tcp::resolver resolver(io_context); //creating  a resolver object that will perform DNS lookcups
 
