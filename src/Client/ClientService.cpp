@@ -50,7 +50,7 @@ void Client::getDataFromUser(){
 
     string  tempIP ;
     int tempPort;
-
+    system("clear");
     cout << "Welcome Random User!! :) \n Please Enter the Server's Connection Details\nPlease Enter the Server ip or if the server is running on same machine type localhost\n";
 
     cin >> tempIP;

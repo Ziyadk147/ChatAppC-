@@ -29,6 +29,7 @@ class ORM {
 
     public:
         ORM();
+        bool presetOrCustomConnectionProperties();
         vector<string> getPropertiesFromUser();
         Connection* createConnection( vector<string> connectionProperties); 
         ResultSet* rawQuery(string query);

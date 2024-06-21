@@ -109,7 +109,7 @@ bool ORM::checkIfTableExists(string tableName){
     }
     return false;
 }
-
+//segfault refactor
 bool ORM::checkIfDatabaseExists(string dbName){
     try{
 
@@ -142,11 +142,28 @@ bool ORM::checkIfDatabaseExists(string dbName){
 
 };
 
+bool ORM::presetOrCustomConnectionProperties(){
+    system("clear");
+    int choice;
+    cout << "Select \n1)PreDefined Database Settings\n2)Give Custom Settings\n";
+    cin >> choice;
 
+    if(choice == 1){
+        this->connectionProps = {"tcp://127.0.0.1:3306" , "ziyad" , "root" , "chatapp"};
+        // this->connectionProps = tempVector;
+
+        return true;
+        
+    }
+    else{
+        return false;
+    }
+
+};
 Connection* ORM::createConnection(vector<string> connectionProperties){
     
     try{
-    
+
         string connectionAddr = connectionProperties[CONNECTION_STRING];
         string username = connectionProperties[USERNAME];
         string password = connectionProperties[PASSWORD];
@@ -193,14 +210,16 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 ResultSet* ORM::rawQuery(string query){
     Statement* stmt;
     try{
-        if(this->connectionProps.empty()){
+        if(presetOrCustomConnectionProperties()){
             
-            this->createConnection(this->getPropertiesFromUser());
+           
+            this->createConnection(this->connectionProps);   
+
 
         }
         else{
+            this->createConnection(this->getPropertiesFromUser());
 
-            this->createConnection(this->connectionProps);   
         
         }
         

@@ -8,14 +8,18 @@
 class User : public ORM{
     private:
     
-        string username;
-        string password;
+        string username = "";
+        string password = ""; 
     
     public:
     
-        void getUserNameFromDB(string userName);
-        void getPassWordFromDB(string userName);    
+        string getUserNameFromDB(string userName);
+        string getPassWordFromDB(string userName);    
         
+        string getUserName();
+        string getUserPassword();
+        void userLoginInput();
+
 };
 
 #endif
