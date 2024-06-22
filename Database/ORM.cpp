@@ -85,6 +85,7 @@ void ORM::createDatabaseIfNotExists(string database){
 
 bool ORM::checkIfTableExists(string tableName){
     try{
+  
         Statement* state = this->connection->createStatement();
         string query =  "SHOW TABLES";
 
@@ -97,9 +98,11 @@ bool ORM::checkIfTableExists(string tableName){
                 return true;
             
             }
+  
         }
         delete state;
         delete table;
+  
     }
     catch(SQLException &e){
 
@@ -140,15 +143,19 @@ bool ORM::checkIfDatabaseExists(string dbName){
     
     return false;
 
-};
 
+};
 bool ORM::presetOrCustomConnectionProperties(){
+  
     system("clear");
+  
     int choice;
+  
     cout << "Select \n1)PreDefined Database Settings\n2)Give Custom Settings\n";
     cin >> choice;
 
     if(choice == 1){
+  
         this->connectionProps = {"tcp://127.0.0.1:3306" , "ziyad" , "root" , "chatapp"};
         // this->connectionProps = tempVector;
 
@@ -156,7 +163,9 @@ bool ORM::presetOrCustomConnectionProperties(){
         
     }
     else{
+  
         return false;
+  
     }
 
 };
@@ -193,7 +202,7 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
         if(this->connection){
 
-            cout << "\n Connected";
+            cout << "\n Database Connected\n";
             return this->connection;
     
         }
@@ -209,10 +218,12 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
 ResultSet* ORM::rawQuery(string query){
     Statement* stmt;
+    // string finalQuery = "START TRANSACTION; " + query + " ; COMMIT";
+
     try{
         if(presetOrCustomConnectionProperties()){
             
-           
+            
             this->createConnection(this->connectionProps);   
 
 
@@ -254,4 +265,15 @@ string ORM::parseSingleString(ResultSet* result){
     }
     return "";
     // delete result;
+};
+
+ResultSet* ORM::insert(string tablename , string insertionColumns , string values){
+    
+    
+    string query = "INSERT INTO "+tablename+"("+insertionColumns+")"+" VALUES ( "+values+" )";
+      cout << query;
+  
+    return this->rawQuery(query);
+
+        
 };

@@ -15,10 +15,12 @@ class User : public ORM{
     
         string getUserNameFromDB(string userName);
         string getPassWordFromDB(string userName);    
-        
+        void   insertUserToDB(string username , string password);
+                
         string getUserName();
         string getUserPassword();
         void userLoginInput();
+        bool checkIfUserExists(string username);
 
 };
 

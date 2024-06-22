@@ -8,52 +8,41 @@
 using namespace std;
 // using namespace boost::asio::ip;
 
+const int LOGIN = 1;
+const int REGISTER = 2;
+const int EXIT = 3;
 
 int main(){
-    try{
+
         Client client;
-
-        if(client.authenticateUser()){
-            boost::asio::io_context io_context;
-            tcp::resolver resolver(io_context); //creating  a resolver object that will perform DNS lookcups
-
-            client.getDataFromUser();
-            
-            tcp::resolver::results_type endpoints = resolver.resolve(client.getServerIPAddr() , to_string(client.getServerPortAddr()));
-            //resovlves the ip and port to a list of enpoints
-
-            auto socket = make_shared <tcp::socket>(io_context);
-
-            boost::asio::connect(*socket , endpoints);
-
-            thread read_thread(
-                [&client](shared_ptr <tcp::socket> socket){
-                
-                    client.readFromServer(socket);
-                
-                } , socket );
-                    /*
-                    created a thread which can be thought of as an extra worker or a processor which will
-                    read the data from the server and also write to it asynchrounusly 
-                    the above threads takes two arguments one is the function which is to be processed and 2nd is
-                    its argument
-                    readThread(readfromserver , socket)
-                    but since readFromServer is a member of the Client class we have to user a lambda function 
-                    lambda functions are unnamed functions syntax is
-                    [capture](arguments if any){work to do}
-                    capture can be anything that can be used in the function
-                    here we have passed the client object by reference which takes a tcp::socket as input and then calls
-                    the readFromServer function of the client class and moves the tcp::socket in it
-                    */
-            client.writeToServer(socket);
-            socket->close();
-            read_thread.join();
-
+        if(client.registerOrLogin() == LOGIN){
+            if(client.authenticateUser()){
+                client.startClient(client);
+            }
+            else{
+                cout << "\n Exiting\n";
+                system("exit");
             };
 
         }
-    catch(exception& error){
-        cerr << "Exception Occured " << error.what() << "\n";
-    }
+        else if(client.registerOrLogin() == REGISTER){
+            // if(client.registerUser()){
+                
+            //     client.startClient(client);
+            
+            // }
+            // else {
+            
+            //     cout << "\ns\n";
+            //     // system("exit");
+            
+            // }
+            cout << client.registerUser();
 
-}
+        }
+        else{
+                cout << "\n Exiting\n";
+                system("exit");
+        }
+    }
+ 

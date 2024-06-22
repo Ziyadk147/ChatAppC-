@@ -13,6 +13,7 @@ class Client : public User {
     private:
         string outGoingData;
         string serverIP;
+        
         char inComingData[256];
 
         int serverPort;
@@ -27,9 +28,10 @@ class Client : public User {
     
         // void getServerIP();
         bool authenticateUser();
+        bool registerUser();
+        int registerOrLogin();
 
-
-
+        void startClient(Client client); 
 };
 
 

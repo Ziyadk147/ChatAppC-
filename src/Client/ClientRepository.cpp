@@ -31,23 +31,50 @@ bool Client::authenticateUser(){
 
     }
     else{
+
         return false;
+
     }
-
-
-    // if(!dbUserName.empty() && getPassWordFromDB(dbUserName) != this->getUserPassword()){
+}
+bool Client::registerUser(){
+    userLoginInput();
     
-    //     cout << "\nInvalid username or Password\n";
+    insertUserToDB(getUserName() , getUserPassword());
+    return true;
+    
+    // if(checkIfUserExists(getUserName())){
+        
     //     return false;
     
     // }
     // else{
-
-    //     system("clear");
-
-    //     cout << dbUserName;
-    //     return true;
         
     // }
+
 }
 
+
+int Client::registerOrLogin(){
+    system("clear");
+    int choice;
+    
+    cout << "Welcome to Chatapplication\nSelect the following options. Press any other key to exit the program\n1)Login\n2)Register\n";
+    cin >> choice;
+    
+    if(choice == 1){
+    
+        return 1;
+    
+    }   
+    else if(choice == 2){
+    
+        return 2;
+    
+    }
+    else{
+
+        return 3;
+    
+    }
+    
+} 

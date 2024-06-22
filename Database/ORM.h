@@ -35,6 +35,7 @@ class ORM {
         ResultSet* rawQuery(string query);
         ResultSet* where(string columns , string tablename , string operand1 , string sqlOperator , string operand2);
         string parseSingleString(ResultSet* result);
+        ResultSet* insert(string tablename , string insertionColumns , string values);
           // ResultSet* raw(string query);
         // void createRecord();
 
