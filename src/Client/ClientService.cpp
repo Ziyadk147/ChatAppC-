@@ -59,6 +59,11 @@ void Client::getDataFromUser(){
 
         this->serverIP = "127.0.0.1";
     }
+    else{
+    
+        this->serverIP = tempIP;
+    
+    }
 
     cout << "\nPlease Enter the port of the server\n";
     cin >> this->serverPort;
