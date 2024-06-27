@@ -2,25 +2,32 @@
 #include<boost/asio.hpp>
 #include "../Server/ServerService.cpp"
 
-using namespace std;
+    using namespace std;
 using namespace boost::asio::ip;
 
 
 int main(){
     try{
         Server server;  
+        system("clear");
+        
+        cout << "\nServer running at port " << server.getServerPort() << "\n";
+
         boost::asio::io_context io_context;
 
         tcp::acceptor acceptor(io_context , tcp::endpoint(tcp::v4() , server.port));
-    
+        
         while(true){
             tcp::socket socket(io_context);
             
             acceptor.accept(socket);
 
             thread(
+ 
                 [&server](tcp::socket socket){
+ 
                     server.createConnection(move(socket));
+ 
             } , move(socket)).detach();
 
             /*

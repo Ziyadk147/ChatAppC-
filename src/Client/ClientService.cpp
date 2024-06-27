@@ -11,12 +11,16 @@ void Client::readFromServer(shared_ptr <tcp::socket> socket){
             size_t messageLength = socket->read_some(boost::asio::buffer(this->inComingData) , error);
 
             if(error == boost::asio::error::eof){
+   
                 cout << "User Disconnected \n";
                 break;
 
             }
             else if(error){
+
                 throw boost::system::error_code(error);
+   
+
             }
             cout << "Reply From User: ";
             cout.write(this->inComingData , messageLength);
@@ -24,7 +28,9 @@ void Client::readFromServer(shared_ptr <tcp::socket> socket){
         }
     }
     catch(exception& error){
+
         cerr << "Exception Occured: " << error.what() << "\n";
+
     }
 }
 
@@ -58,6 +64,7 @@ void Client::getDataFromUser(){
     if(tempIP == "localhost" || tempIP == "LOCALHOST"){
 
         this->serverIP = "127.0.0.1";
+
     }
     else{
     
