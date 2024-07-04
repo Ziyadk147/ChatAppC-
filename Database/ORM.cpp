@@ -28,6 +28,23 @@ ORM::ORM(){
 
 //pointer Connection* because  Connection throws error
 
+bool ORM::presetOrCustomSettings(){
+    system("clear");
+    int choice;
+    
+    cout << "\n Do you want to use the preset settings or do you want to input custom settings\n1)Preset\nany other key for custom settings\n";
+    cin >> choice;
+
+    if(choice == 1){
+        return true;
+    }
+    else {
+        return false;
+    }
+    
+
+};
+
 vector<string> ORM::getPropertiesFromUser(){
     vector <string> tempVector;
     string tempInput;
@@ -141,10 +158,25 @@ bool ORM::checkIfDatabaseExists(string dbName){
 
 };
 
+Connection* ORM::connect(){
+    if(presetOrCustomSettings()){
+    
+        return  createConnection(this->connectionProps);
+    
+    }
+    else{
+
+        return  createConnection(getPropertiesFromUser());
+    
+    };
+    
+}
 
 Connection* ORM::createConnection(vector<string> connectionProperties){
     
     try{
+
+        
         string connectionAddr = connectionProperties[CONNECTION_STRING];
         string username = connectionProperties[USERNAME];
         string password = connectionProperties[PASSWORD];
@@ -171,7 +203,8 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
         if(this->connection){
 
-            cout << "\n Connected";
+            // cout << "\n Connected";
+            system("clear");
             return this->connection;
         }
     }
@@ -182,3 +215,70 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
     return 0;
 };
 
+
+
+ResultSet* ORM::raw(string query){
+    Connection *rawConn;
+    
+    // delete this->statement;
+    rawConn = this->connect();
+
+    this->statement = rawConn->createStatement();
+
+    return this->statement->executeQuery(query);
+
+}
+
+
+string ORM::parseSingleString(ResultSet *str){
+    string result; 
+    
+    while(str->next()){
+    
+        result = str->getString(1);
+    
+    }
+    
+    return result;
+}
+
+
+void ORM::insert(string tablename , string columns , string values){
+    try{
+        string query = "INSERT INTO "+tablename+" ( "+columns+" )"+" VALUES ( " + values + " );";  
+    
+        int rowAffected = 0;
+
+        Connection *rawConn;
+        
+        rawConn = this->connect();
+
+        this->statement = rawConn->createStatement();
+
+        this->statement->execute(query);
+        
+        rowAffected  = this->statement->getUpdateCount();
+        
+        // cout << rowAffected;  
+
+        if(rowAffected == 1){
+      
+            system("clear");
+ 
+            cout << "\n Record Created Successfully\n"; 
+        }
+        else{
+ 
+            throw SQLException("Error Creating Record");
+ 
+        }
+
+    }
+    catch(SQLException& e){
+        cerr << "\n SQLEXCEPTION: " << e.what() << "\n"; 
+    };
+    
+    
+    
+
+}
