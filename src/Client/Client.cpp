@@ -2,7 +2,7 @@
 #include <thread>
 // #include <boost/asio.hpp>
 #include "../Client/ClientService.cpp"
-
+#include "../Client/ClientRepository.cpp"
 
 using namespace std;
 // using namespace boost::asio::ip;
@@ -11,6 +11,16 @@ using namespace std;
 int main(){
     try{
         Client client;
+        if(client.registerOrLogin()){
+        
+            client.registerUser();
+        
+        }    
+        client.loginUser();
+        
+        
+
+
         boost::asio::io_context io_context;
         tcp::resolver resolver(io_context); //creating  a resolver object that will perform DNS lookcups
 

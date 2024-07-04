@@ -19,19 +19,25 @@ class ORM {
         Connection *connection;
         Statement *statement;
         ResultSet *resultset;
+        vector <string> connectionProps = {"tcp://127.0.0.1:3306" , "ziyad" , "root" , "chatapp"};
+        Connection* createConnection( vector<string> connectionProperties); 
+
         void createDatabaseIfNotExists(string database);
         
         bool checkIfDatabaseExists(string dbName);
         bool checkIfTableExists(string tableName);
-    
+
+        bool presetOrCustomSettings();  
 
 
     public:
         ORM();
         vector<string> getPropertiesFromUser();
-        Connection* createConnection( vector<string> connectionProperties); 
-          // ResultSet* raw(string query);
-        // void createRecord();
+        ResultSet* raw(string query);
+        void insert(string tablename , string columns , string values);
+        string parseSingleString(ResultSet *str);
+        
+        Connection* connect();
 
 
 };

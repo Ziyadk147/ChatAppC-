@@ -4,11 +4,12 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "../Server/ServerInterface.h"
+#include "User.h"
 
 using namespace std;
 using namespace boost::asio::ip;
 
-class Client {
+class Client : public User {
     private:
         string outGoingData;
         string serverIP;
@@ -24,6 +25,10 @@ class Client {
         void getDataFromUser();
         string getServerIPAddr();
         int getServerPortAddr();        
+
+        bool registerOrLogin();
+        void registerUser();
+        void loginUser();
         // void getServerIP();
 
 
