@@ -2,6 +2,13 @@
 #include<boost/asio.hpp>
 #include "../Client/ClientInterface.h"
 
+struct JSON_RESPONSE{
+
+    string message;
+    int sender_id;    
+
+};
+
 void Client::readFromServer(shared_ptr <tcp::socket> socket){
     try{
         while(true){
@@ -38,6 +45,13 @@ void Client::writeToServer(shared_ptr <tcp::socket> socket){
                 cout << "BYE!" << "\n";
                 exit(200);
             }
+            struct JSON_RESPONSE json;
+            
+            json.message = this->outGoingData;
+            // json.sender_id = getUserID(getUserName());
+
+            cout << "{\"message\":\""+json.message+"\",\"sender_id\":" << getUserID("ziyad") ;
+            
             boost::asio::write(*socket , boost::asio::buffer(this->outGoingData));
         }
     }

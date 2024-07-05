@@ -225,6 +225,7 @@ ResultSet* ORM::raw(string query){
 
     this->statement = rawConn->createStatement();
 
+    // delete rawConn;
     return this->statement->executeQuery(query);
 
 }
@@ -278,7 +279,16 @@ void ORM::insert(string tablename , string columns , string values){
         cerr << "\n SQLEXCEPTION: " << e.what() << "\n"; 
     };
     
-    
-    
+}
 
+int ORM::parseSingleInt(ResultSet *str){
+    int result;
+    
+    while(str->next()){
+    
+        result = str->getInt(1);
+    
+    }   
+    
+    return result;
 }

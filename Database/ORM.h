@@ -32,11 +32,12 @@ class ORM {
 
     public:
         ORM();
+
         vector<string> getPropertiesFromUser();
         ResultSet* raw(string query);
         void insert(string tablename , string columns , string values);
         string parseSingleString(ResultSet *str);
-        
+        int parseSingleInt(ResultSet *str);
         Connection* connect();
 
 
