@@ -1,8 +1,8 @@
 #include "../ORM.h"
-
+const int INSERTFLAG = 4;
+const int FETCHFLAG = 5;
 class User : public ORM {
     private:
-        int user_id;
         string username;
         string password;
 
@@ -14,12 +14,6 @@ class User : public ORM {
         bool authenticateUser(string username , string password);
         bool checkIfUserExistsInDB(string username);
 
-        void setUserName(string username);
-        void setPassword(string username);    
-
-        int getUserID(string username);
-
-        string getUserName();
 };
 
 
