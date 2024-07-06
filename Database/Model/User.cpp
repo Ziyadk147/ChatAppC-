@@ -1,6 +1,19 @@
 #include "../Model/User.h"
 
 
+// string User::getUserNameFromDB(string username){
+//     ResultSet *userresult;
+
+//     string query = "SELECT username  FROM users WHERE username = \""+username+"\" LIMIT 1";
+    
+//     userresult = raw(query);
+
+//     string user =  parseSingleString(userresult);
+
+//     delete userresult;
+//     return user;
+// };
+
 string User::getPasswordFromDB(string username){
 
     ResultSet *userresult;
@@ -31,13 +44,16 @@ bool User::checkIfUserExistsInDB(string username){
     delete userresult;
     
     if(foundName == username && !foundName.empty()){
+
+        // cout << foundName << endl << ername;
+    // cout << endl << username << endl << foundName;
     
         return true;
 
     }
 
     else{
-
+    // cout << endl << username << endl << foundName;
         
         return false;
 
@@ -45,29 +61,21 @@ bool User::checkIfUserExistsInDB(string username){
 }
 
 void  User::insertUserinDB(string username , string password){
-    
     string tablename = "users";
-
     string columns = "username , password" ;
-    
     string values = "\""+username+"\",\""+password+"\"";
 
     insert(tablename , columns , values);
-
 }
 
 bool User::authenticateUser(string username , string password){
 
     if(checkIfUserExistsInDB(username)){
-        
         string dbUsername = username;
         string dbPassword =  getPasswordFromDB(dbUsername);
 
         if(dbPassword == password){
-            
-            setUserName(dbUsername);
-            setPassword(dbPassword);
-
+        
             return true;
         
         }
@@ -85,44 +93,16 @@ bool User::authenticateUser(string username , string password){
     }
 }
 
-
-int User::getUserID(string username){
-
-    string name;
-
-    if(username.empty()){
+// int main(){
+//     User user;
+//     user.insertUserinDB("testuser2" , "12345");
+//     if(user.authenticateUser("testuser" , "12345")){
+        
+//         cout << "\n Welcome testuser1\n";
     
-        name = this->username;
-    
-    }
-    else{
-    
-        name = username;
-    
-    }
-    string query = "SELECT id FROM users WHERE username = \""+name+"\" LIMIT 1;";
+//     }
 
-    ResultSet *result = raw(query);
-
-    int id = parseSingleInt(result);
-
-    return id;      
-}
-
-void User::setUserName(string name){
-
-    this->username = name;
-
-}
-
-void User::setPassword(string password){
-    
-    this->password = password;
-
-}
-
-string User::getUserName(){
- 
-    return this->username;
-
-}
+//     else{
+//         cout << "\n dafa ho bkl";
+//     }
+   
