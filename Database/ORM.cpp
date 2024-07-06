@@ -12,14 +12,6 @@ using namespace std;
 using namespace sql;
 
 
-
-const int CONNECTION_STRING = 0;
-const int USERNAME = 1;
-const int PASSWORD = 2;
-const int DBNAME  = 3;
-
-
-
 ORM::ORM(){
 
     this->driver = get_driver_instance();
@@ -28,52 +20,6 @@ ORM::ORM(){
 
 //pointer Connection* because  Connection throws error
 
-bool ORM::presetOrCustomSettings(){
-    system("clear");
-    int choice;
-    
-    cout << "\n Do you want to use the preset settings or do you want to input custom settings\n1)Preset\nany other key for custom settings\n";
-    cin >> choice;
-
-    if(choice == 1){
-        return true;
-    }
-    else {
-        return false;
-    }
-    
-
-};
-
-vector<string> ORM::getPropertiesFromUser(){
-    vector <string> tempVector;
-    string tempInput;
-    
-    cout << "Enter your Connection string" << endl;
-    cin >> tempInput;
-
-    tempVector.push_back(tempInput);
-
-    cout << "Enter your Database Username" << endl;
-    cin >> tempInput;
-
-    tempVector.push_back(tempInput);
-
-    cout << "Enter your Database Password " << endl;
-    cin >> tempInput;
-
-    tempVector.push_back(tempInput);
-    
-    
-    cout << "Enter your Database name " << endl;
-    cin >> tempInput;
-
-    tempVector.push_back(tempInput);
-    
-    
-    return tempVector;
-    
-}
 
 void ORM::createDatabaseIfNotExists(string database){
     
@@ -158,30 +104,14 @@ bool ORM::checkIfDatabaseExists(string dbName){
 
 };
 
-Connection* ORM::connect(){
-    if(presetOrCustomSettings()){
-    
-        return  createConnection(this->connectionProps);
-    
-    }
-    else{
-
-        return  createConnection(getPropertiesFromUser());
-    
-    };
-    
-}
-
-Connection* ORM::createConnection(vector<string> connectionProperties){
+Connection* ORM::createConnection(){
     
     try{
-
         
-        string connectionAddr = connectionProperties[CONNECTION_STRING];
-        string username = connectionProperties[USERNAME];
-        string password = connectionProperties[PASSWORD];
-        string database = connectionProperties[DBNAME];
-
+        string connectionAddr = getConnectionString();
+        string username = getDBUsername();
+        string password = getDBPassword();
+        string database = getDBName();
 
         this->connection = driver->connect(connectionAddr , username , password );
         if(! this->checkIfDatabaseExists(database) ){
@@ -218,12 +148,15 @@ Connection* ORM::createConnection(vector<string> connectionProperties){
 
 
 ResultSet* ORM::raw(string query){
-    Connection *rawConn;
-    
     // delete this->statement;
-    rawConn = this->connect();
+    if(!this->connection){
 
-    this->statement = rawConn->createStatement();
+        this->createConnection();
+    
+    }
+
+
+    this->statement = this->connection->createStatement();
 
     // delete rawConn;
     return this->statement->executeQuery(query);
@@ -250,11 +183,14 @@ void ORM::insert(string tablename , string columns , string values){
     
         int rowAffected = 0;
 
-        Connection *rawConn;
-        
-        rawConn = this->connect();
+        if(!this->connection){
 
-        this->statement = rawConn->createStatement();
+            this->createConnection();
+        
+        }
+
+
+        this->statement = this->connection->createStatement();
 
         this->statement->execute(query);
         
